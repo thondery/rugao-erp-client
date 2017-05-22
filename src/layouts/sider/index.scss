@@ -1,0 +1,13 @@
+.app-sider {
+  flex: 0 0 200px;
+  background-color: #333744;
+
+  .ant-menu-dark, .ant-menu-dark .ant-menu-sub {
+    color: hsla(0,0%,100%,.67);
+    background: #333744;
+  }
+  
+  .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+    background: #24262f;
+  }
+}
