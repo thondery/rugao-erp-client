@@ -1,19 +1,19 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Modal, Form, Button, Input, InputNumber, Checkbox, message } from 'antd'
+import { Modal, Form, Button, Input, Select, message } from 'antd'
 import * as actions from './action'
-import flagData from '../../../data/flag.json'
 import _ from 'lodash'
 
 const FormItem = Form.Item
-const CheckboxGroup = Checkbox.Group
+const Option = Select.Option
 
 @connect(
   state => ({
-    addPending: state.AdminGroup.addPending,
-    addError: state.AdminGroup.addError,
-    addMessage: state.AdminGroup.addMessage
+    addPending: state.Part.addPending,
+    addError: state.Part.addError,
+    addMessage: state.Part.addMessage,
+    species: state.Part.species
   }),
   dispatch => ({
     actions: bindActionCreators({...actions}, dispatch)
@@ -47,9 +47,9 @@ export default class AddModal extends Component {
   }
 
   render () {
-    const { addPending } = this.props
+    const { addPending, species } = this.props
     const setting = {
-      title: '创建管理组',
+      title: '添加零件',
       onCancel: this.handleCancel.bind(this),
       onOk: this.handleOk.bind(this),
       visible: this.props.visible,
@@ -69,19 +69,20 @@ export default class AddModal extends Component {
           提交
         </Button>
       ],
-      width: 800,
+      //width: 800,
       maskClosable: false
     }
     return (
       <Modal {...setting}>
-        <WrappedGroupForm 
-          ref={'addGroup'} />
+        <WrappedPartForm 
+          ref={'addPart'}
+          species={species} />
       </Modal>
     )
   }
 
   handleCancel (e) {
-    this.refs.addGroup.resetFields()
+    this.refs.addPart.resetFields()
     this.props.closeModel()
   }
 
@@ -90,22 +91,23 @@ export default class AddModal extends Component {
   }
 
   handleOk () {
-    this.refs.addGroup.validateFieldsAndScroll((err, values) => {
+    this.refs.addPart.validateFieldsAndScroll((err, values) => {
       if (!err) {
         //console.log('Received values of form: ', values)
         this.props.actions.saveAdd({
-          name    : values.name,
-          level   : values.level,
-          flag    : values.flag
+          model       : values.model,
+          name        : values.name,
+          species     : values.species
         })
       }
     })
   }
 }
 
-const WrappedGroupForm = Form.create()(React.createClass({
+const WrappedPartForm = Form.create()(React.createClass({
 
   render () {
+    const { species } = this.props
     const { getFieldDecorator, getFieldValue } = this.props.form
     const formItemLayout = {
       labelCol: { span: 4 },
@@ -115,11 +117,11 @@ const WrappedGroupForm = Form.create()(React.createClass({
       <Form layout={'horizontal'} className={'app-modal-form'}>
         <FormItem
           {...formItemLayout}
-          label="组称谓"
+          label="零件型号"
           hasFeedback>
-          {getFieldDecorator('name', {
+          {getFieldDecorator('model', {
             rules: [
-              { required: true, message: '组称谓不能为空!' }
+              { required: true, message: '零件型号不能为空!' }
             ]
           })(
             <Input />
@@ -127,36 +129,35 @@ const WrappedGroupForm = Form.create()(React.createClass({
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="权 级"
+          label="零件名称"
           hasFeedback>
-          {getFieldDecorator('level', {
-            rules: [],
-            initialValue: 99
+          {getFieldDecorator('name', {
+            rules: [
+              { required: true, message: '零件名称不能为空!' }
+            ]
           })(
-            <InputNumber min={0} max={99} />
+            <Input />
           )}
-        </FormItem><FormItem
+        </FormItem>
+        <FormItem
           {...formItemLayout}
-          label="权 限"
+          label="零件种类"
           hasFeedback>
-          {getFieldDecorator('flag', {
-            rules: []
+          {getFieldDecorator('species', {
+            rules: [
+              { required: true, message: '零件种类不能为空!' }
+            ]
           })(
-            <CheckboxGroup options={flagOptions()} />
+            <Select style={{ width: 200 }} placeholder="请选择零件种类">
+              {species.map( (item, i) => {
+                return (
+                  <Option key={i} value={item.sid}>{item.name}</Option>
+                )
+              })}
+            </Select>
           )}
         </FormItem>
       </Form>
     )
   }
 }))
-
-const flagOptions = () => {
-  const options = []
-  for (let e of flagData) {
-    options.push({
-      label: e.name,
-      value: e.code
-    })
-  }
-  return options
-}

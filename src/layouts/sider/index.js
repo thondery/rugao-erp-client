@@ -5,6 +5,7 @@ import { Menu, Icon } from 'antd'
 import './index.scss'
 import { adminsSub } from '../../features/admins/admins'
 import { userSub } from '../../features/user/user'
+import { partlibSub } from '../../features/partlib/partlib'
 const { SubMenu, ItemGroup } = Menu
 import _ from 'lodash'
 
@@ -24,6 +25,7 @@ export default class Sider extends Component {
           defaultOpenKeys={[pathMatch && pathMatch[2]]}
           selectedKeys={[pathname.toLowerCase()]}
           inlineIndent={22} >
+          {this.renderSubMenu(`partlib`, `零件库`, `database`, partlibSub)}
           {this.renderSubMenu(`admins`, `帐号管理`, `team`, adminsSub)}
           {this.renderSubMenu(`user`, `用户中心`, `user`, userSub)}
         </Menu>
