@@ -63,10 +63,17 @@ export default class Species extends Component {
           <span>
             <a onClick={() => this.setState({ model: 'edit', selectId: record.sid })}>编辑</a>
             <span className="ant-divider" />
+            {record.counts > 0 ? (
+              <a onClick={() => Modal.warning({
+                title: '提示',
+                content: '请先移除该种类下所有零件'
+              })}>删除</a>
+            ) : (
               <Popconfirm title={`确定要删除该种类吗？`}
                 onConfirm={() => this.props.actions.remove(record.sid)}>
                 <a>删除</a>
               </Popconfirm>
+            )}
           </span>
         )
       }
