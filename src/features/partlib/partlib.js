@@ -34,5 +34,6 @@ export default class Partlib extends Component {
 
 export const partlibSub = [
   { key: 'species', name: '零件种类', path: 'partlib' },
-  { key: 'part', name: '零件管理', path: 'partlib'}
+  { key: 'part', name: '零件管理', path: 'partlib' },
+  { key: 'warehouse', name: '出入库管理', path: 'partlib' }
 ]

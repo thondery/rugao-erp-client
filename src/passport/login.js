@@ -37,8 +37,6 @@ export default class Login extends Component {
   }
 
   handleSubmit (values) {
-    console.log(values)
-    //this.setState({ pending: true })
     this.props.actions.login(values)
   }
 

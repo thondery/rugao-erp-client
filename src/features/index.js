@@ -10,6 +10,7 @@ import User from './user'
 import Partlib from './partlib'
 import SpeciesReducer from './partlib/species/reducer'
 import PartReducer from './partlib/part/reducer'
+import WarehouseReducer from './partlib/warehouse/reducer'
 
 export const Routes = [
   Home,
@@ -23,5 +24,6 @@ export const Reducers = {
   AdminGroup          : AdminGroupReducer,
   AdminUser           : AdminUserReducer,
   Species             : SpeciesReducer,
-  Part                : PartReducer
+  Part                : PartReducer,
+  Warehouse           : WarehouseReducer
 }
